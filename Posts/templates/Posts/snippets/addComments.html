@@ -1,0 +1,33 @@
+<script type="text/javascript">
+	
+//Like Unlike
+ $('.comment-form').submit(function(e){
+	 e.preventDefault()
+
+	 const post_id = $(this).attr('id')
+	 console.log(post_id)
+	 const url = $(this).attr('action')
+	 console.log(url)
+	 const user_comment = $(".user_comment"+post_id).val()
+	 console.log(user_comment)
+
+	 payload = {
+		 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+		 'post_id':post_id,
+	 },
+	 $.ajax({
+		 type: 'POST',
+		 dataType: "json",
+		 url: url,
+		 data: payload,
+		 success: function(response) {
+		 	 // $('.main-comment').html(response['form']);
+		 	 console.log(payload)
+		 },
+		 error: function(response) {
+			 console.log()
+		 }
+	 });
+ });
+
+</script>

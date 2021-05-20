@@ -1,0 +1,64 @@
+.glass{
+  background: rgba( 225, 225, 225, 0.05 );
+  /* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
+  box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.2 );
+  backdrop-filter: blur( 10px );
+  -webkit-backdrop-filter: blur( 10px );
+  border-radius: 8px;
+  border: 1px solid rgba( 225, 225, 225, 0.1 );
+  /* border: 1px solid rgba( 162, 163, 165, 0.18 ); */
+}
+
+.glass-fluid{
+  background: rgba( 225, 225, 225, 0.05 );
+  box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.2 );
+  backdrop-filter: blur( 10px );
+  -webkit-backdrop-filter: blur( 10px );
+  border-radius: 0px;
+}
+
+.shadow-white-1{
+  -webkit-box-shadow:0 2px 5px 0 rgba(225, 225, 225, 0.25),
+  0 3px 10px 0 rgba(225, 225, 225, 0.2)!important;
+  box-shadow:0 2px 5px 0 rgba(225, 225, 225, 0.25),
+  0 3px 10px 0 rgba(225, 225, 225, 0.2)!important;
+}
+
+.shadow-white-5{
+  box-shadow: 0 8px 32px 0 rgba( 225, 225, 225, 0.2 );
+}
+
+.avatar{
+  width: 168px;
+  height: 168px;
+  margin-top: -140px;
+}
+
+.btn-link{
+  color: #f6f5f7 !important;
+}
+
+.btn-link.active, .btn-link.active:focus, .btn-link.focus, .btn-link:active,
+.btn-link:active:focus, .btn-link:focus,.btn-link:hover{
+  background-color: #262626 !important;
+}
+
+/* Edit Profile */
+.avatar-btn{
+  width: 50px !important;
+  height: 50px !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0px;
+  border-radius:10px !important;
+  background-color: #000;
+}
+
+.avatar-btn-img{
+  justify-content: center;
+  padding: 0px;
+  margin: 0px;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 10px !important;
+}

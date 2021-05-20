@@ -1,0 +1,1 @@
+web: gunicorn AlumniSys.wsgi --log-file -

@@ -1,0 +1,171 @@
+{% extends "Profiles/base_profile_template.html" %}
+{% load static %}
+{% block pageTitle %} Edit Profile | Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block bodyContent %}
+
+<main class="">
+	<section class="custom-main">
+		<div class="container my-5 p-3 glass">
+			<div class="row">
+
+				{# List group #}
+				<div class="col-4 d-none d-md-block">
+					<ul class="list-group">
+						<li class="list-group-item active">Edit Profile</li>
+						<a href="{% url 'password_change' %}"><li class="list-group-item">Change Password</li></a>
+						{# <li class="list-group-item"></li> #}
+					</ul>
+				</div>
+
+				{# Content  #}
+				<div class="col-sm-12 col-md-8">
+				{# Tab panes #}
+					<div class="glass p-3 text-white">
+						<article class="">
+							{# Do Ajax for Alert... #}
+							{% if confirm %}
+								<div class="alert alert-success" role="alert">
+									Your Profile has been updated!
+								</div>
+							{% endif %}
+							<form class="row text-white {% if form.error %} gy-3 {% else %} g-4 {% endif %}" action="" enctype="multipart/form-data" method="POST" role="presentation" novalidate>
+								{% csrf_token %}
+								{# Info #}
+								<div class="col-12">
+
+									<div class="d-flex justify-content-between align-items-center">
+										{# Name, Username #}
+										<div class="ml-3 mt-2">
+
+											<div class="">
+												<h5 class="mb-0 ml-1">{{user.first_name}} {{user.last_name}} <small class="text-sm">@<em> {{user.username}}</em></small></h5>
+											</div>
+											<div class="">
+												<button class="btn btn-link px-1 choose-avatar"><small>Change Profile Photo</small></button>
+											</div>
+										</div>
+										{# Avatar #}
+										<div class="mr-3">
+											<button class="btn btn-link m-0 avatar-btn choose-avatar" title="Change Profile Photo" data-target="cropModal">
+												<img class="avatar-btn-img hover-overlay" id="og-avatar" src="{{user.avatar.url}}" alt="" width="50" height="50">
+											</button>
+											<p class=""><em>Currently: <a href="{{user.avatar.url}}" class="text-muted">{{form.avatar.name}}</a></em></p>
+											<input accept="image/jpeg, image/png, image/jpg" id="avatar" name="avatar" type="file" style="display: none !important">
+										</div>
+
+										{# Modal Crop Avatar #}
+										<div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered" role="document">
+												<div class="modal-content bg-dark text-light">
+													<div class="modal-header">
+														<h5 class="modal-title" id="cropModalLabel"><strong>Crop Avatar</strong></h5>
+														<button type="button" class="close align-self-center" data-dismiss="modal" aria-label="Close">
+															<i class="fas fa-times text-white"></i>
+														</button>
+													</div>
+													<div class="modal-body m-0 p-0 w-100">
+															<img class="w-100" id="crop-avatar" src="">
+													</div>
+													<div class="modal-footer">
+														<button type="submit" id="confirm-crop" class="btn btn-primary"><i class="fas fa-check mr-2"></i> Change</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								{# First Name #}
+								<div class="col-md-6">
+									<div class="input-group form-outline {% if form.first_name.errors %} m-0 {% else %} mb-2 {% endif %}">
+										<span class="input-group-text text-white-50" id="user-addon"><i class="fas fa-user-secret"></i></span>
+										<input type="text" class="form-control text-white {% if form.first_name.errors %} is-invalid m-0 {% endif %}" id="first_name" name="first_name" value="{{form.first_name.value}}">
+										<label for="first_name" class="form-label text-white-50">First name</label>
+									</div>
+									{% for err in form.first_name.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+								</div>
+
+								{# Last name #}
+								<div class="col-md-6">
+									<div class="input-group form-outline {% if form.last_name.errors %} m-0 {% else %} mb-2 {% endif %}">
+										<span class="input-group-text text-white-50" id="@-addon"><i class="fas fa-user-secret"></i></span>
+										<input type="text" class="form-control text-white {% if form.last_name.errors %} is-invalid m-0 {% endif %}" id="last_name" name="last_name" value="{{form.last_name.value}}">
+										<label for="last_name" class="form-label text-white-50">Last name</label>
+									</div>
+									{% for err in form.last_name.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+								</div>
+
+								{# Username #}
+								<div class="col-md-12">
+									<div class="input-group form-outline {% if form.username.errors %} m-0 {% else %} mb-2 {% endif %}">
+										<span class="input-group-text text-white-50" id="@-addon"><i class="fas fa-at"></i></span>
+										<input type="text" class="form-control text-white {% if form.username.errors %} is-invalid m-0 {% endif %}" id="username" name="username"
+												 value="{{form.username.value}}" maxlength="150" aria-label="Username" aria-describedby="basic-addon1">
+										<label for="username" class="form-label text-white-50">Username</label>
+									</div>
+									{% for err in form.username.errors %}<div class=" text-danger"><small> {{err}} </small></div>{% endfor %}
+								</div>
+
+								{# Email input #}
+								<div class="col-md-12">
+									<div class="input-group form-outline {% if form.email.errors %} m-0 {% else %} mb-2 {% endif %}">
+										<span class="input-group-text text-white-50" id="email-addon"><i class="fas fa-envelope"></i></span>
+										<input class="form-control text-white {% if form.email.errors %} is-invalid m-0 {% endif %}" type="email" id="email" name="email" value="{{form.email.value}}" required>
+										<label for="email" class="form-label text-white-50">Email address</label>
+									</div>
+									{% for err in form.email.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+								</div>
+
+								{# Mobile No. #}
+								<div class="col-md-12">
+									<div class="input-group form-outline {% if form.phone.errors %} m-0 {% else %} mb-2 {% endif %}">
+										<span class="input-group-text text-white-50" id="tel-addon"><i class="fas fa-phone-alt"></i></span>
+										<input class="form-control text-white {% if form.phone.errors %} is-invalid m-0 {% endif %}" type="tel" id="phone" name="phone" value="{{form.phone.value}}">
+										<label for="phone" class="form-label text-white-50">Phone number</label>
+									</div>
+									{% for err in form.phone.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+								</div>
+
+								{# Website #}
+								<div class="col-md-12">
+									<div class="input-group form-outline mb-2">
+										<span class="input-group-text text-white-50" id="www-addon"><i class="fa fa-globe"></i></span>
+										<input type="url" class="form-control text-white" id="website" name="website" value="{{form.website.value}}" aria-label="Website" aria-describedby="basic-addon2">
+										<label for="website" class="form-label text-white-50">Website</label>
+									</div>
+								</div>
+
+								{# Bio #}
+								<div class="col-md-12">
+									<div class="form-outline mb-2">
+										<textarea class="form-control text-white" id="bio" name="bio" rows="3" maxlength="300">{{form.bio.value}}</textarea>
+										<label for="bio" class="form-label text-white-50">Bio</label>
+									</div>
+								</div>
+
+								{# Gender? #}
+								{# Submit Btn #}
+								<div class="modal-footer border-0">
+									<button type="submit" class="btn btn-info"><i class="fas fa-check mr-2"></i>Update</button>
+								</div>
+							</form>
+
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</main>
+
+
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+    {% include 'Profiles/snippets/cropAvatar.html' %}
+{% endblock scripts %}
+
+

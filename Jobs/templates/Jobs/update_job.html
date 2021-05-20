@@ -1,0 +1,43 @@
+{% extends "Jobs/base_job_template.html" %}
+{% load static  %}
+
+{% block pageTitle %} Jobs | Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block description %} Update Page {% endblock description %}
+
+{% block bodyContent %}
+ <main class="">
+ 	<section class="custom-main bg-light">
+ 		<div class="container my-5 pb-4" style="">
+ 			<div class="row">
+ 				<div class="col-3 d-none d-md-block"></div>
+	 				{% if user.is_authenticated and job.owner == user %}
+	 				    <div class="col-12 col-md-6 p-4 glass">
+	 					<h3 class="text-center my-3">Update Job</h3>
+	 					<hr>
+	 					<form class="" action="" method="POST">
+							{% csrf_token %}
+
+					 		{{ form.media }}<!--for ckeditor -->
+					 		{{ form.as_p }} 
+		 					
+		 					{# Submit Btn #}
+							<div class="modal-footer border-0 pb-0">
+								<button type="submit" class="btn btn-info"><i class="fas fa-check mr-2"></i>Update</button>
+							</div>
+		 				</form>
+	 				{% else %}
+	 				    <h4 class="text-center my-3">Sorry you should be in here <a href="{% url 'job-lists' %}" class="text-primary"> Go Back</a></h4>
+	 				{% endif %}
+ 				</div>
+ 				<div class="col-3 d-none d-md-block"></div>
+ 			</div>
+	 	</div>
+ 	</section>
+ </main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+    
+{% endblock scripts %}

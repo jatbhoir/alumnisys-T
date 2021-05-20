@@ -1,0 +1,101 @@
+{% extends "Jobs/base_job_template.html" %}
+{% load static  %}
+
+{% block pageTitle %} Jobs | Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block description %} Add Job Page {% endblock description %}
+
+{% block bodyContent %}
+ <main class="">
+ 	<section class="custom-main bg-light">
+ 		<div class="container my-5 pb-4" style="">
+ 			<div class="row">
+ 				<div class="col-3 d-none d-md-block"></div>
+ 				<div class="col-12 col-md-6 p-4 glass">
+ 					<h3 class="text-center my-3">Add Job</h3>
+ 					<hr>
+ 					<form class="" action="" method="POST">
+						{% csrf_token %}
+
+				 		{{ form.media }}<!--for ckeditor -->
+				 		{{ form.as_p }} 
+	 					
+	 					{# Submit Btn #}
+						<div class="modal-footer border-0 pb-0">
+							<button type="submit" class="btn btn-info"><i class="fas fa-check mr-2"></i>Add Job</button>
+						</div>
+	 				</form>
+ 				</div>
+ 				<div class="col-3 d-none d-md-block"></div>
+ 			</div>
+	 	</div>
+ 	</section>
+ </main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+    <script type="text/javascript">
+		var userid = '{{user.id}}';
+		document.getElementById('owner').value = userid;
+	</script>
+{% endblock scripts %}
+
+<!-- 			 		{# Job Title #}
+					<div class="col-md-12">
+						<div class="input-group form-outline {% if form.jobTitle.errors %} m-0 {% else %} mb-2 {% endif %}">
+							<span class="input-group-text" id="user-addon"><i class="fas fa-heading"></i></span>
+							{{ form.jobTitle }}
+							<label for="jobTitle" class="form-label"> Job Title</label>
+						</div>
+						{% for err in form.jobTitle.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+					</div>
+
+					{# Job Description #}
+					<div class="col-md-12">
+						{{ form.jobDescription }}
+					</div>
+
+					{# Salary #}
+					<div class="col-md-12">
+						<div class="input-group form-outline {% if form.salary.errors %} m-0 {% else %} mb-2 {% endif %}">
+							<span class="input-group-text" id="user-addon"><i class="fas fa-rupee-sign"></i></span>
+							{{ form.salary }}
+							<label for="salary" class="form-label">Salary</label>
+						</div>
+						{% for err in form.salary.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+					</div>
+
+					{# Company #}
+					<div class="col-md-12">
+						<div class=" form-outline {% if form.company.errors %} m-0 {% else %} mb-2 {% endif %}">
+							<label for="company" class="form-label">Company</label>
+							{{ form.company }}
+						</div>
+						{% for err in form.company.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+					</div>
+
+					{# Category #}
+					<div class="col-md-12">
+						<div class="form-outline {% if form.category.errors %} m-0 {% else %} mb-2 {% endif %}">
+							<label for="category" class="form-label">Category</label>
+							{{ form.category }}
+						</div>
+						{% for err in form.category.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+					</div>
+
+					{# Position Type #}
+					<div class="col-md-12">
+						<div class="form-outline {% if form.positionType.errors %} m-0 {% else %} mb-2 {% endif %}">
+							<label for="positionType" class="form-label">Position Type</label>
+							{{ form.positionType }}
+						</div>
+						{% for err in form.positionType.errors %}<div class="mb-1 text-danger"><small> {{err}} </small></div>{% endfor %}
+					</div>
+
+					{# Last Date #}
+					<div class="col-md-12">
+						<label for="lastDate" class="form-label">Last Date</label>
+						{{ form.lastDate }}
+					</div>
+ -->

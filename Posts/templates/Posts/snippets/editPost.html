@@ -1,0 +1,34 @@
+{#  Modal editPost #}
+<div class="modal fade" id="editPostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content bg-dark text-light">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editPostModalLabel"><strong>Edit Post</strong></h5>
+				<button type="button" class="close align-self-center" data-dismiss="modal" aria-label="Close">
+					<i class="fas fa-times text-white"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="" action="" method="POST" enctype="multipart/form-data">
+					<div class="form-group">
+						{% csrf_token %}
+						<input type="hidden" name="" value="{{post.id}}">
+
+						<div class="col-md-12">
+						  <div class="form-outline mb-2">
+							<textarea class="form-control mb-3 glass" id="content{{post.id}}" name="content" rows="3" cols="40">{{ post.content|safe }}</textarea>
+							<label for="content" class="form-label text-white-50">Content</label>
+						  </div>
+						</div>
+						
+						<div class="modal-footer">
+							<button class="btn btn-primary" onclick="triggerEditPost('{{post.id}}')"><strong>Save</strong></button>
+							<a class="btn btn-secondary " href="{% url 'Posts:all-posts'%}" role="button"><strong>No</strong></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

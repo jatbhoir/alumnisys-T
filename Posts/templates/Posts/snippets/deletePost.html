@@ -1,0 +1,29 @@
+{#  Modal deletePost #}
+<div class="modal fade" id="deletePostModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="editPostModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content bg-dark text-light">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editPostModalLabel"><strong>Are you sure you want to delete?</strong></h5>
+				<button type="button" class="close align-self-center" data-dismiss="modal" aria-label="Close">
+					<i class="fas fa-times text-white"></i>
+				</button>
+			</div>
+			<div class="modal-body">
+				{% if messages %}
+					{% for message in messages %}
+						{% if 'warning' in message.tags %}
+						  <div class="alert alert-danger" role="alert">
+							{{message}}
+						  </div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+				<form class="" action="" method="POST">
+					{% csrf_token %}
+					<button type="submit"class="btn btn-danger" onclick="triggerDeletePost('{{post.id}}')"><strong>Yes</strong></button>
+					<a class="btn btn-secondary" href="{% url 'Posts:all-posts'%}" role="button"><strong>No</strong></a>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

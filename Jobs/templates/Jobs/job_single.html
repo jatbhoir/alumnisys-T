@@ -1,0 +1,78 @@
+{% extends "Jobs/base_job_template.html" %}
+{% load static  %}
+
+{% block pageTitle %} Job | Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block description %} Posts Page {% endblock description %}
+
+{% block bodyContent %}
+ <main class="">
+	<section class="custom-main bg-light">
+		<div class="container my-5 p-3" style="">
+
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+				<li class="breadcrumb-item" style="font-size: 12px"><a href="{% url 'job-lists' %}">Jobs</a></li>
+				<li class="breadcrumb-item active" style="font-size: 12px" aria-current="page">{{job.jobTitle|truncatechars:50}}</li>
+			  </ol>
+			</nav>
+
+			<div class="card">
+				<div class="card-header">
+					<p class="mb-0" style="font-size: 14px">{{job.company.companyName}} | {{job.jobTitle}}</p>
+				</div>
+				<div class="card-body">
+					<div class="d-inline-flex align-items-center">
+						<img class="glass-fluid" src="{{job.company.companyLogo.url}}" alt="" width="80px" height="80px">
+						<div class="ml-2">
+							<h4 class=""><strong>{{job.jobTitle}}</strong></h4>
+							<h6 class="">{{job.company.companyName}} | {{job.company.companyLocation}}</h6>
+							<span class="badge rounded-pill glass text-dark">{{job.positionType}}</span>
+						</div>
+					</div>
+					<hr class="">
+					<div class="container">
+						<div class="row">
+							<div class="col-12 col-md-10">
+								<h6 class=""><strong>Job Description</strong></h6>
+								<hr class="">
+								{{job.jobDescription|safe}}
+							</div>
+							<div class="col-lg-2">
+								<div class="glass p-2 p-md-4">
+									{% if currentdatetime|date:"d-M-Y" < job.lastDate|date:"d-M-Y"  %}
+										<p class="mb-0 ml-2">Last Date:</p>
+										<p class="mb-1 ml-2"> {{job.lastDate|date:"d M Y"}}</p>
+										{% if user.is_authenticated and job.owner == user %}
+											<a href="{% url 'Jobs:update-job' uuid=uuid %}" class="btn btn-block btn-primary">Update Job</a>
+										{% else %}
+										   	<a class="btn btn-primary btn-block" href="{{job.jobURL}}">Apply</a> 
+										{% endif %}	
+									{% else %}
+										<div class="d-inline-md-flex">
+											<p class="mb-1">Last Date:</p>
+											<p class="text-muted ml-1">Expired</p>
+										</div>
+										{% if user.is_authenticated and job.owner == user %}
+											<a href="{% url 'Jobs:update-job' uuid=uuid %}" class="btn btn-block btn-primary">Update Job</a>
+										{% else %}
+											<button href="" class="btn btn-block btn-primary" disabled>Apply</button>
+										{% endif %}		
+									{% endif %}
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+ </main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+	
+{% endblock scripts %}

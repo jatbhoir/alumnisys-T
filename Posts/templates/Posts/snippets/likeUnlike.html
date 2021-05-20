@@ -1,0 +1,48 @@
+<script type="text/javascript">
+	
+//Like Unlike
+ $('.like-form').submit(function(e){
+	 e.preventDefault()
+
+	 const post_id = $(this).attr('id')
+	 const likeText = $(".like-btn"+post_id).find("i").hasClass("like-heart") ? "Like":"Unlike" //check for class and if true then set value as unlike or like..
+	 const trim = $.trim(likeText)
+	 const url = $(this).attr('action')
+	 let res;
+	 const val = $(".like-count"+post_id).val()
+	 const trimCount = parseInt(val)
+
+	 $.ajax({
+		 type: 'POST',
+		 url: url,
+		 data: {
+			 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+			 'post_id':post_id,
+		 },
+		 success: function(response) {
+
+			 if(trim === 'Unlike') {
+				 $(`.like-btn${post_id}`).html('<i class="far fa-heart fa-lg like-heart"></i>')
+				 res = trimCount - 1;
+			 } else {
+				 $(`.like-btn${post_id}`).html('<i class="fa fa-heart fa-lg text-danger"></i>')
+				 res = trimCount + 1;
+			 }
+
+			 $(".like-count"+post_id).val(res)
+
+			  if (res == 0) {
+				$(`.like-count${post_id}`).html('<p class="mb-2 text-sm like-count{{post.id}"></p>')
+			  } else if (res == 1) {
+				$(`.like-count${post_id}`).html('<p class="mb-2 text-sm like-count{{post.id}"><strong>1 like</strong></p>')
+			  } else if (res > 1) {
+				$(`.like-count${post_id}`).html('<p class="mb-2 text-sm like-count{{post.id}"><strong>'+res+' likes</strong></p>')
+			  }
+		 },
+		 error: function(response) {
+			 console.log('error', response)
+		 }
+	 });
+ });
+
+</script>

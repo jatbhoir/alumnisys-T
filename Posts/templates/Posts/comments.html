@@ -1,0 +1,26 @@
+<div class="comment-section">
+	{% if post.comment_set.all.count > 2 %}
+		<p class="text-sm my-2 "><a href="#" class="text-reset" ><strong>View all {{post.comment_set.all.count}} comments </strong></a></p>
+	{% endif %}
+	{% if post.comment_set.all %}
+		{% for all_comment in post.comment_set.all|slice:":2" %}
+			<p class="mb-1 text-sm comment-reset">
+				<span><strong><a class="text-white-50" href="{{post.author.get_absolute_url}}">{{  all_comment.user }}</a></strong> {{ all_comment.user_comment|safe }}</span>
+			</p>
+		{% endfor %}
+	{% endif %}
+</div>
+
+<!-- comment form -->
+<form class="mt-2 comment-form" id="{{post.id}}" action="" method="POST">
+	{% csrf_token %}
+	<div class="row d-flex justify-content-center align-items-center g-1">
+		<div class="col-11">
+			<input type="hidden" name="post_id" value="{{ post.id }}">
+			<textarea name="user_comment" class="form-control glass user_comment{{post.id}}" rows="1" placeholder="Write a comment..." maxlength="300" required="" id="user_comment"></textarea>
+		</div>
+		<div class="col-1">
+			<button type="submit" name="submit_comment" class="btn btn-primary align-items-center"><i class="fas fa-paper-plane mr-1"></i></button>
+		</div>
+	</div>
+</form>

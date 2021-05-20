@@ -1,0 +1,48 @@
+{% extends "Profiles/base_profile_template.html" %}
+{% load static  %}
+
+{% block pageTitle %}
+	{{searched}} - search results | Alumni Association | Alumni Acharya | AAAI
+{% endblock pageTitle %}
+
+<!-- bodyProfile-->
+{% block bodyContent %}
+<main class="custom-main">
+	<section class="mt-5 text-muted glass">
+		<h6 class="text-white mt-3 ml-3"><strong>You Searched For :  {{searched}}</strong></h6>
+		<div class="row mx-md-2">
+			{% for friend in search_results %}
+					<div class="col-lg-4 my-2">
+						<div class="glass p-3 ">
+							<div class="d-flex align-items-center">
+								<!-- avatar -->
+								<a class="" href="{{ friend.0.get_absolute_url }}">
+									<img src="{{friend.0.avatar.url}}" class="rounded" width="80" height="80" alt="{{friend.0.user}}">
+								</a>
+								<!-- User's name, Users friend count -->
+								<div class=" ml-3">
+									<a class="link-primary" href="{{ friend.0.get_absolute_url }}">
+										{% if friend.0.first_name %}
+											<h5 class="h5">{{friend.0.first_name}} {{friend.0.last_name}}</h5>
+										{% else %}
+											<h5 class="h5">{{friend.0.username}}</h5>
+										{% endif %}
+									</a>
+
+									<a href="{{ friend.0.get_absolute_url }}friends">
+										{% if friend.0.friends.all|length  == 0 %}
+										{% elif friend.0.friends.all|length  == 1 %}
+											<p class="text-muted m-0 p-0"><em>1 Friend</em></p> 
+										{% else %}
+											<p class="text-muted m-0 p-0"><em>{{friend.0.friends.all|length}} Friends</em></p>
+										{% endif %}
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+			{% endfor %}
+		</div>
+	</section>
+</main>
+{% endblock bodyContent %}

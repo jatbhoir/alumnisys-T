@@ -1,0 +1,24 @@
+{#  Modal addPost #}
+<div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createPostModalLabel"><strong>Create Post</strong></h5>
+        <button type="button" class="close align-self-center" data-dismiss="modal" aria-label="Close">
+          <i class="fas fa-times text-white"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="" action="" method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            {% csrf_token %}
+            {{ createPostForm.as_p }}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="submit_add_post" class="btn btn-primary btn-lg btn-block"><strong>Post</strong></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+:root {
+  --light-white: #ededed;
+  --alumni-yellow: #e6b934;
+  --alumni-blue: #072d42;
+  --alumni-primary: #20253A;
+  --font-family-sans-serif: 'Open Sans', Lato, sans-serif;
+  --font-family-monospace: Lato, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+body{
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  /* margin: 0 !important; */
+  /* padding-top: 4.5rem !important; */
+  background: url('/static/media/BG1_Light.jpg') !important;
+  height: 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+  /* background-color: #20253A !important; */
+}
+
+a{
+  font-family: 'Open Sans', sans-serif !important;
+  text-decoration: none !important;
+}
+
+/*ul{
+   /*font-family: 'Open Sans', sans-serif !important;
+  font-weight: 400 !important; /*
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}*/
+
+.text-sm{
+  font-size: 14px !important;
+}
+
+.custom-main{
+  padding-top: 4rem !important;
+}
+
+@media (max-width: 575.98px) {
+  .custom-main{
+    padding-top: 2rem !important;
+  }
+}
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid green;
+  -webkit-text-fill-color: green;
+  -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+  transition: background-color 5000s ease-in-out 0s;
+} */
+
+.glass{
+  background: rgba( 225, 225, 225, 0.05 );
+  /* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
+  box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.2 );
+  backdrop-filter: blur( 10px );
+  -webkit-backdrop-filter: blur( 10px );
+  border-radius: 8px;
+  border: 1px solid rgba( 225, 225, 225, 0.1 );
+  /* border: 1px solid rgba( 162, 163, 165, 0.18 ); */
+}
+
+.glass-fluid{
+  background: rgba( 225, 225, 225, 0.05 );
+  box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.2 );
+  backdrop-filter: blur( 10px );
+  -webkit-backdrop-filter: blur( 10px );
+  border-radius: 0px;
+}

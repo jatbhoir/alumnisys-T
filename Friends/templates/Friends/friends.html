@@ -1,0 +1,181 @@
+{% extends "Friends/base_friends_template.html" %}
+{% load static  %}
+
+{% block pageTitle %}
+	{% if account.first_name %}
+			{{account.first_name}} {{account.last_name}} | Alumni Association | Alumni Acharya | AAAI
+	{% else %}
+			{{account.username}} | Alumni Association | Alumni Acharya | AAAI
+	{% endif %}
+{% endblock pageTitle %}
+
+{% block description %}  {% endblock description %}
+
+<!-- bodyProfile-->
+{% block bodyContent %}
+<main class="custom-main">
+	<section class=" glass-fluid py-5" >
+		<div class="container glass">
+
+			<section class="py-3 px-2 d-md-flex justify-content-between align-items-center">
+				<div class="border-bottom">
+					<h4 class="text-white"><strong>Friends</strong></h4>
+				</div>
+				<!-- Search Form, Buttons-->
+				<div class="d-md-inline-flex align-items-md-center mt-2 mt-md-0">
+					<div class="order-2 order-md-1">
+						<form class="input-group ">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search">
+							<button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+						</form>
+					</div>
+					<div class=" ml-0 ml-md-2 order-1 order-md-2">
+						<a href="{% url 'Friends:request-invite-friend' %}" role="button" class="btn btn-link" data-ripple-color="dark">Friend requests</a>
+						<a href="{% url 'Friends:request-invite-friend' %}" role="button" class="btn btn-link" data-ripple-color="dark">Find Friends</a>
+					</div>
+				</div>
+			</section>
+
+			<!--- Friends in Users List --->
+			<section class="border-top ">
+				{% if Friends %}
+					<div class="row mx-2 mt-2">
+							{% for friend in Friends %}
+								<div class="col-md-6 my-2">
+									<div class="glass p-3 ">
+										<div class="d-flex align-items-center">
+											<!-- avatar -->
+											<a class="" href="{{ friend.0.get_absolute_url }}">
+												<img src="{{friend.0.avatar.url}}" class="rounded" width="80" height="80" alt="{{friend.user}}">
+											</a>
+											<!-- User's name, Users friend count -->
+											<div class="ml-3">
+												<a class="link-primary" href="{{ friend.0.get_absolute_url }}">
+													{% if friend.0.first_name %}
+														<h5 class="h5"><strong>{{friend.0.first_name}} {{friend.0.last_name}}</strong></h5>
+													{% else %}
+														<h5 class="h5"><strong>{{friend.0}}</strong></h5>
+													{% endif %}
+												</a>
+												<a href="{{ friend.0.get_absolute_url }}friends">
+													{% if friend.0.friends.all|length  == 0 %}
+													{% elif friend.0.friends.all|length  == 1 %}
+													   <p class="text-muted m-0 p-0"><em>1 Friend</em></p> 
+													{% else %}
+													     <p class="text-muted m-0 p-0"><em>{{friend.0.friends.all|length}} Friends</em></p>
+													{% endif %}
+												</a>
+
+											</div>
+
+											<!-- Options -->
+											<div class="ml-auto">
+												<div class="dropdown rounded dropleft">
+													<a class="btn ml-auto" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														<i class="fas fa-ellipsis-h text-muted float-right"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+														<a class="dropdown-item" href="{{ friend.0.get_absolute_url }}" ><i class="fas fa-user"></i> See profile</a>
+														<div class="dropdown-divider m-0"></div>
+
+														{% if friend.1 %}
+															<button class="dropdown-item" type="submit" id="unfriend_btn"><i class="fas fa-user-times"></i>
+															 Unfriend
+															</button>
+														{% elif friend.0 != request.user %}
+															<input type="hidden" id="value" value="{{friend.0.id}}">
+															<div class="d-block" id="send_div">
+																<button class="dropdown-item" type="submit" id="send_btn"><i class="fas fa-user-plus"></i>
+															 		Add Friend
+																</button>
+															</div>
+															<div class="d-none" id="cancel_div">
+																<button class="dropdown-item" type="submit" id="cancel_btn"><i class="far fa-times-circle"></i>
+																 Cancel Request
+																</button>
+															</div>
+
+														{% elif friend.0 == request.user %}
+															<div>
+																<a class="dropdown-item" href="{% url 'edit-profile' %}" ><i class="fas fa-cog"></i> Edit profile</a>
+															</div>
+														{% endif %}
+
+													</div>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+					</div>
+				{% else %}
+						<h5 class="h5 pl-3 py-3 text-white-50"><small>No Friends in List, why not <a class="btn py-0 px-1 text-muted" href="{% url 'Friends:request-invite-friend' %}">make some</a>...</small></h5>
+				{% endif %}
+			</section>
+
+		</div>
+	</section>
+</main>
+
+<script type="text/javascript">
+
+	function onFriendRequestSent(){
+		// temp solution for toggling
+		var sendFriendRequestDiv = document.getElementById("send_div")
+		var cancelFriendRequestDiv = document.getElementById("cancel_div")
+		
+		sendFriendRequestDiv.classList.add("d-none")
+		sendFriendRequestDiv.classList.remove("d-block")
+		cancelFriendRequestDiv.classList.add("d-block")
+		cancelFriendRequestDiv.classList.remove("d-none")
+
+	}
+
+	function onFriendRequestCancelled(){
+		// temp solution for toggling
+		var cancelFriendRequestDiv = document.getElementById("cancel_div")
+		var sendFriendRequestDiv = document.getElementById("send_div")
+
+		cancelFriendRequestDiv.classList.add("d-none")
+		cancelFriendRequestDiv.classList.remove("d-block")
+		sendFriendRequestDiv.classList.add("d-block")
+		sendFriendRequestDiv.classList.remove("d-none")
+	}
+
+	function onFriendRemoved(){
+		location.reload();
+	}
+
+	var sendFriendRequestBtn = document.getElementById("send_btn")
+	var sendFriendRequestValue = document.getElementById("value").value
+	if (sendFriendRequestBtn != null){
+		sendFriendRequestBtn.addEventListener("click", function(){
+			sendFriendRequest(sendFriendRequestValue, onFriendRequestSent)
+		})
+	}
+
+	var cancelFriendRequestBtn = document.getElementById("cancel_btn")
+	var cancelFriendRequestValue = document.getElementById("value").value
+	if(cancelFriendRequestBtn != null){
+		cancelFriendRequestBtn.addEventListener("click", function(){
+			cancelFriendRequest(cancelFriendRequestValue, onFriendRequestCancelled)
+		})
+	}
+
+	var removeFriendBtn = document.getElementById("unfriend_btn")
+	var removeFriendValue = document.getElementById("value").value
+	if (removeFriendBtn != null){
+		removeFriendBtn.addEventListener("click", function(){
+			removeFriend(removeFriendValue, onFriendRemoved)
+		})
+	}
+	
+</script>
+
+{% include 'Friends/snippets/send.html' %}
+{% include 'Friends/snippets/cancel.html' %}
+{% include 'Friends/snippets/unfriend.html' %}
+
+{% endblock bodyContent%}

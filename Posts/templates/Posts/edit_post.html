@@ -1,0 +1,33 @@
+{% extends "Profiles/base_profile_template.html" %}
+{% load static  %}
+
+{% block bodyContent %}
+<main class="custom-main">
+	<section class="container-fluid text-white">
+		<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="mt-5">
+					<div class="card w-100 p-3 glass text-white">
+						<div class="card-header border-bottom"><h4><i class="fas fa-"></i> <strong>Edit Post</strong></h4></div>
+						<div class="card-body">
+
+							<form class="" action="" method="POST" enctype="multipart/form-data">
+								<div class="form-group">
+									{% csrf_token %}
+									{{ form.as_p }}
+									<button type="submit"class="btn btn-primary "><strong>Save</strong></button>
+									<a class="btn btn-secondary " href="{% url 'Posts:all-posts'%}" role="button"><strong>No</strong></a>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	</section>
+</main>
+
+{% endblock bodyContent %}

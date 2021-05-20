@@ -1,0 +1,99 @@
+{% extends "Friends/base_friends_template.html" %}
+{% load static  %}
+
+{% block pageTitle %}
+	{% if user.first_name %}
+			{{user.first_name}} {{user.last_name}} | Alumni Association | Alumni Acharya | AAAI
+	{% else %}
+			{{user.username}} | Alumni Association | Alumni Acharya | AAAI
+	{% endif %}
+{% endblock pageTitle %}
+
+{% block description %}  {% endblock description %}
+
+<!-- bodyProfile-->
+{% block bodyContent %}
+<main class="custom-main" >
+	<section class=" glass-fluid py-5" >
+		<div class="container glass">
+
+			<section class="py-3 px-2 d-sm-flex justify-content-between align-items-center">
+				<div class="">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb glass py-1 px-2">
+							<li class="breadcrumb-item "><a href="{% url 'Friends:request-invite-friend' %}" class="text-muted">Friends</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Friend requests</li>
+						</ol>
+					</nav>
+					<h4 class="text-white"><strong>Friend requests</strong></h4>
+
+				</div>
+			</section>
+
+			<!-- Friend requests -->
+			<section class="border-top">
+				<div class="row mx-md-2">
+					{% for friend in friend_requests %}
+						<div class="col-lg-4 my-2">
+							<div class="glass p-3 ">
+								<div class="d-flex align-items-center">
+									<!-- avatar -->
+									<a class="" href="">
+										<img src="{{friend.sender.avatar.url}}" class="rounded" width="80" height="80" alt="{{friend}}_avatar">
+									</a>
+									<!-- User's name -->
+									<div class="ml-3">
+										<a class="link-primary" href="{{ friend.get_absolute_url }}">
+											{% if friend.sender.first_name %}
+												<h5 class="h5">{{friend.sender.first_name}} {{friend.sender.last_name}}</h5>
+											{% else %}
+												<h5 class="h5">{{friend}}</h5>
+											{% endif %}
+										</a>
+										<!-- Accept/Reject Form-->
+										<div class="d-inline-flex">
+											<button class="btn px-2 py-1 btn-outline-success" id="id_confirm_{{friend.sender.id}}" onclick="triggerAcceptFriendRequest('{{friend.id}}')"><small>Accept</small></button>
+											<button class="btn px-2 py-1 btn-outline-danger ml-2" id="id_cancel_{{friend.sender.id}}"onclick="triggerDeclineFriendRequest('{{friend.id}}')" ><small>Reject</small></button>
+										</div>
+									
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				{% if not friend_requests %}
+					<h5 class="text-muted glass p-2 pl-3"><small>No new request</small></h5>
+				{% endif %}
+			</section>
+
+		</div>
+	</section>
+</main>
+
+
+{% block scripts %}
+    <script type="text/javascript">
+		function onFriendRequestAccepted(){
+			location.reload();
+		}
+
+		function onFriendRequestDeclined(){
+			location.reload();
+		}
+
+		function triggerAcceptFriendRequest(friend_request_id){
+			acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+		}
+
+		function triggerDeclineFriendRequest(friend_request_id){
+			declineFriendRequest(friend_request_id, onFriendRequestDeclined)
+		}
+	</script>
+
+	{% include 'Friends/snippets/accept.html' %}
+	{% include 'Friends/snippets/reject.html' %}
+
+{% endblock scripts %}
+
+{% endblock bodyContent%}

@@ -1,0 +1,26 @@
+{% extends "Profiles/base_profile_template.html" %}
+{% load static  %}
+
+{% block bodyContent %}
+  {% if messages %}
+    {% for message in messages %}
+        {% if 'warning' in message.tags %}
+        <div class="alert alert-danger" role="alert">
+          {{message}}
+        </div>
+        {% endif %}
+    {% endfor %}
+  {% else %}
+    <div class="container mt-5">
+      <div class="card p-3 bg-dark">
+        <form class="" action="" method="POST">
+          {% csrf_token %}
+          <p style="color:white">Are you sure you want to delete?</p>
+          <button type="submit"class="btn btn-danger"><strong>Yes</strong></button>
+          <a class="btn btn-secondary" href="{% url 'Posts:all-posts'%}" role="button"><strong>No</strong></a>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock bodyContent %}

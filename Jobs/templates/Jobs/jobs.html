@@ -1,0 +1,44 @@
+{% extends "Jobs/base_job_template.html" %}
+{% load static  %}
+
+{% block pageTitle %} Jobs | Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block description %} Jobs Page {% endblock description %}
+
+{% block bodyContent %}
+ <main class="">
+	<section class="custom-main bg-light">
+		<div class="container my-5" style="">
+			
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col"><strong>Job Profile</strong></th>
+						<th scope="col"><strong>Company</strong></th>
+						<th scope="col"><strong>Location</strong></th>
+					  <!-- <th scope="col">Handle</th> -->
+					</tr>
+				</thead>
+				{% for job in object_list %}
+					<tbody>
+						<tr>
+							<td>
+								<img src="{{job.company.companyLogo.url}}" alt="" width="30px" height="30px">
+								<a href="{{ job.get_absolute_url }}"><strong>{{job.jobTitle}}</strong></a>
+							</td>
+							<td>{{job.company.companyName}}</td>
+							<td>{{job.company.companyLocation}}</td>
+						</tr>
+					</tbody>
+				{% endfor %}
+			</table>
+			
+		</div>
+	</section>
+ </main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+
+{% endblock scripts %}

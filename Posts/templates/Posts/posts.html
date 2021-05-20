@@ -1,0 +1,198 @@
+{% extends "Posts/base_posts_template.html" %}
+{% load static  %}
+
+{% block pageTitle %} Alumni Association | Alumni Acharya | AAAI {% endblock pageTitle %}
+
+{% block description %} Posts Page {% endblock description %}
+
+{% block bodyContent %}
+
+<main class="custom-main">
+	<section class="container my-5">
+		<div class="row">
+			 <div class="col-md-1"></div>
+			 <div class="col-md-7">
+				<!-- Story -->
+<!-- 				<section class="story-container glass" id="story">
+					<ul>
+						<li>
+							<div class="story">
+								<img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="50" alt="" loading="lazy">
+							</div>
+							<span class="text-sm">Users</span>
+						</li>
+					</ul>
+				</section> -->
+
+
+				<!-- Post -->
+				{% for post in posts %}
+					<section class="mb-3"> {# replace mb-3 with my-3 when story is enabled  #} 
+						<div class="post">
+							<div class="card glass-fluid">
+								<!-- Avatar-->
+								<div class="card-header my-2">
+									<div class="row">
+										<div class="col-10">
+											<div class="story d-flex align-items-center">
+												<img src="{{post.author.avatar.url}}" alt="{{post.author}}_Avatar" class="rounded-circle" height="28" width="28" loading="lazy">
+												<div class="">
+													<a class="text-white-50 ml-2" href="{{post.author.get_absolute_url}}">{{post.author.user}}</a>
+												</div>
+											</div>
+
+										</div>
+										<div class="col-2">
+											<!-- <i class="fas fa-ellipsis-h mt-2 mr-2 float-right"></i> -->
+											<!-- Do dropdown menu for EDIT DELETE ETC -->
+											<div class="dropdown float-right">
+												<a class="btn ml-auto" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<i class="fas fa-ellipsis-h text-white-50 float-right"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+													{% if user.pk == post.author.pk %}
+														<a class="dropdown-item" data-toggle="modal" data-target="#editPostModal{{post.id}}" ><i class="fas fa-pen mr-2"></i>Edit post</a>
+														<a class="dropdown-item" data-toggle="modal" data-target="#deletePostModal{{post.id}}"><i class="fas fa-trash-alt mr-2"></i>Delete post</a>
+													{% else %}
+														<a class="dropdown-item" href="{{ post.author.get_absolute_url }}" ><i class="fas fa-pen mr-2"></i>See Profile</a>
+													{% endif %}
+													<div class="dropdown-divider p-0 m-0"></div>
+													<a class="dropdown-item" data-dismiss="dropdown">Cancel</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- Video?/Image -->
+								<div class="card-body ripple m-0 p-0" data-ripple-color="light">
+									{% if post.image %}
+										<img class="w-100" src="{{post.image.url}}" alt="{{post.image}}">
+									{% endif %}
+								</div>
+								<!-- Like unlinke/ Comment -->
+								<div class="card-footer text-muted">
+									<ul class="list-group list-group-horizontal shadow-0 mb-2" style="list-style: none !important;">
+										<li>
+											<!--- like/unlike --->
+											<form action="{% url 'Posts:like-unlike-post' %}" method="POST" class="like-form" id="{{post.id}}">
+												{% csrf_token %}
+												<input type="hidden" name="post_id" value="{{post.id}}">
+												<button type="submit" class="btn text-white-50 justify-content-center like-btn{{post.id}}">
+													{% if account not in post.likes.all %}
+														<i class="far fa-heart fa-lg like-heart"></i>
+													{% else %}
+														<i class="fa fa-heart fa-lg text-danger"></i>
+													{% endif %}
+												</button>
+											</form>
+										</li>
+										<li>
+											<button type="button" class="btn text-white-50"><i class="far fa-comment fa-lg"></i></button>
+										</li>
+									</ul>
+									<input type="hidden" class="like-count{{post.id}}" value="{{post.num_likes}}">
+									<p class="mb-2 text-sm like-count{{post.id}}">
+										{% if post.num_likes == 0 %}
+										{% elif post.num_likes == 1 %}
+											<strong>1 like</strong>
+										{% elif post.num_likes > 1  %}
+											<strong>{{ post.num_likes }} likes</strong>
+										{% endif %}
+									</p>
+									<p class="mb-1 text-sm">
+										<span><strong><a class="text-white-50" href="{{post.author.get_absolute_url}}">{{ post.author.user }}</a></strong> {{ post.content|safe }}</span>
+									</p>
+									<hr>
+									<!-- Comments -->
+									<div class="main-comment">
+										{% include 'Posts/comments.html' %}
+									</div>
+									
+
+									<!-- Time -->
+									<hr class="mb-1">
+									<p class="mb-0"><small>{{ post.created|timesince }} ago</small></p>
+								</div>
+							</div>
+						</div>
+					</section>
+					{% if user.pk == post.author.pk %}
+						{% include 'Posts/snippets/editPost.html'%}
+						{% include 'Posts/snippets/deletePost.html'%}
+					{% endif %}
+
+				{% endfor %}
+
+			 </div>
+			 <div class="col-md-3 d-sm-none d-md-block glass">
+				<!-- Content Comin' Soon -->
+
+			 </div>
+			 <div class="col-md-1 d-sm-none d-md-block"></div>
+		</div>
+
+		<!-- Modal addPost -->
+		{% include 'Posts/snippets/addPost.html' %}
+
+	</section>
+</main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+	<script type="text/javascript">
+
+		function triggerEditPost(pk){
+			var url = "{% url 'Posts:edit-post' pk=8658586686568656582345644565857978954 %}".replace("8658586686568656582345644565857978954", pk)
+			var content = document.getElementById("content"+pk).value
+			console.log(content)
+			payload = {
+				"csrfmiddlewaretoken": "{{ csrf_token }}",
+				"content": content,
+			}
+			$.ajax({
+				type: 'POST',
+				dataType: "json",
+				url: url,
+				timeout: 5000,
+				data: payload,
+				success: function(data) {
+					location.reload()
+				},
+				error: function(data) {
+					alert("Something went wrong.")
+				},
+				complete: function(data){
+					location.reload()
+				}
+			});
+		}
+		
+		function triggerDeletePost(pk){
+			var url = "{% url 'Posts:delete-post' pk=8658586686568656582345644565857978954 %}".replace("8658586686568656582345644565857978954", pk)
+			payload = {
+				"csrfmiddlewaretoken": "{{ csrf_token }}",
+				"pk": pk,
+			}
+			$.ajax({
+				type: 'POST',
+				dataType: "json",
+				url: url,
+				timeout: 5000,
+				data: payload,
+				success: function(data) {
+					location.reload()
+				},
+				error: function(data) {
+					alert("Something went wrong.")
+				},
+				complete: function(data){
+					location.reload()
+				}
+			});
+		}
+	
+	</script>
+    {% include 'Posts/snippets/likeUnlike.html' %}
+    {#% include 'Posts/snippets/addComments.html' %#}
+{% endblock scripts %}

@@ -1,0 +1,299 @@
+{% extends "Profiles/base_profile_template.html" %}
+{% load static %}
+
+{% block pageTitle %}
+	{% if first_name %}
+			{{first_name}} {{last_name}} | Alumni Association | Alumni Acharya | AAAI
+	{% else %}
+			{{username}} | Alumni Association | Alumni Acharya | AAAI
+	{% endif %}
+{% endblock pageTitle %}
+
+{% block description %} {{bio}} {% endblock description %}
+
+{#  bodyProfile#}
+{% block bodyContent %}
+<main class="">
+	{#  Section Information #}
+	<section class="glass-fluid mb-4">
+		<div class="container">
+			
+
+			{#  Section Images #}
+			<section class="mb-5">
+				{#  Cover Image  #}
+				{#  https://mdbcdn.b-cdn.net/img/new/slides/297.jpg -> {{cover.url}} #}
+				<div class="bg-image shadow-white-5 rounded-bottom" style="background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/297.jpg'); height: 400px;">
+					<div class="mask" style="background-color: rgba(0, 0, 0, 0.6);"></div>
+				</div>
+				{#  Profile Image #}
+				<div class="d-flex justify-content-center">
+					<img class="rounded-circle shadow-white-5 position-absolute avatar" src="{{avatar.url}}" alt="{{user}}_avatar">
+				</div>
+			</section>
+			{#  Section User Info #}
+			<section class="text-center border-bottom">
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-8">
+						<h4 class="h4 text-white"><strong>
+							{% if first_name %}
+								{{first_name}} {{last_name}}
+							{% else %}
+								{{username}}
+							{% endif %}
+						</strong></h4>
+						<p class="text-muted">{{bio|safe}}</p>
+					</div>
+				</div>
+			</section>
+
+			{#  Section Buttons #}
+			<section class="py-3 d-flex justify-content-between align-items-center">
+				{#  left Side #}
+				<div class="">
+					<a href="{{get_absolute_url }}friends" role="button" class="btn btn-link" data-ripple-color="dark">Friends <small class="text-muted">{{friends|length}}</small></a>
+				</div>
+				{#  Right Side #}
+				<div class="">
+					{% if is_self %}
+						{#  AddPost and EditPost #}
+						<a data-toggle="modal" data-target="#createPostModal" role="button" class="btn btn-primary" data-ripple-color="dark"><i class="fas fa-plus-circle mr-1"></i>Add Post</a>
+						<a href="{% url 'edit-profile' %}" class="btn btn-secondary" data-ripple-color="dark"><i class="fas fa-pencil-alt mr-1"></i>Edit Profile</a>
+					{% else %}
+
+					{#  Friend Request #}
+					
+					{# FROM THEM TO YOU #}
+					{% if request_sent == 0 %}
+						<button class="btn px-2 py-1 btn-outline-success" id="id_confirm_{{users_id}}" onclick="triggerAcceptFriendRequest('{{pending_req_id}}')"><small>Accept</small></button>
+						<button class="btn px-2 py-1 btn-outline-danger ml-2" id="id_cancel_{{users_id}}" onclick="triggerDeclineFriendRequest('{{pending_req_id}}')" ><small>Reject</small></button>
+					{% endif %}
+
+					{# Cancel Friend Request / Send Friend Request / Remove Friend #}
+					{% if is_friend == False and is_self == False %}
+						
+						{# YOU TO THEM #}
+						{% if request_sent == 1 %}
+							<button class="btn btn-danger" id="cancel_btn">
+								Cancel Request
+							</button>
+						{% endif %}
+						
+						{# No requests have been sent #}
+						{% if request_sent == -1 %}
+							<button type="submit" class="btn btn-primary" id="send_btn">
+								<i class="fas fa-user-plus"></i> Add Friend
+							</button>
+						{% endif %}
+					{% endif %}
+
+					{# ALREADY FRIENDS #}
+					{% if is_friend %}
+						<button type="submit" class="btn btn-danger" id="unfriend_btn">
+							<i class="fas fa-user-times"></i> Unfriend
+						</button>
+					{% endif %}
+					{% endif %}
+				</div>
+			</section>
+
+		</div>
+	</section>
+
+	{#  Section Posts And Other #}
+	<section class="">
+		<div class="container">
+			<div class="row">
+				{#  Col-5 #}
+				<div class="col-md-5">
+
+					{#  Photos #}
+					<div class="card glass mb-4">
+						<div class="card-header border-light">
+							<a href="#" class="text-reset d-inline-block">
+								<h5 class="text-white mt-1"><strong>Photos</strong></h5>
+							</a>
+							<a href="#" class="btn btn-link d-inline-block float-right py-1 px-3">
+								See all Photos
+							</a>
+						</div>
+						<div class="card-body">
+								<div class="lightbox">
+									<div class="row gx-2">
+										<div class="col-4 mb-2">
+											<img class="w-100 shadow-1-strong rounded" src="{{profile.avatar.url}}" alt="">
+										</div>
+										<div class="col-4 mb-2">
+											<img class="w-100 shadow-1-strong rounded" src="{{profile.avatar.url}}" alt="">
+										</div>
+										<div class="col-4 mb-2">
+											<img class="w-100 shadow-1-strong rounded" src="{{profile.avatar.url}}" alt="">
+										</div>
+										<div class="col-4 mb-2">
+											<img class="w-100 shadow-1-strong rounded" src="{{profile.avatar.url}}" alt="">
+										</div>
+									</div>
+								</div>
+						</div>
+					</div>
+
+					{#  Friends #}
+					<div class="card glass mb-4">
+						<div class="card-header border-light">
+							<div class="text-reset d-inline-block">
+								<a href="#"><h5 class="text-white mt-1"><strong>Friends</strong></h5></a>
+								<small class="h6 text-muted">
+									<em>
+										{% if friends|length == 0 %}
+										{% elif friends|length == 1 %}
+											1 Friend
+										{% else %}
+											{{friends|length}} Friends
+										{% endif %}
+									</em>
+								</small>
+							</div>
+							<a href="{{get_absolute_url }}friends" class="btn btn-link d-inline-block float-right px-3">
+								See all Friends
+							</a>
+						</div>
+						
+						<div class="card-body">
+							<div class="row text-center gx-4">
+								{% if friends %}
+									{% for friend in friends|slice:":2" %}
+										<div class="col-4 mb-1">
+											<a href="{{friend.get_absolute_url}}">
+												<img class="w-100 shadow-1-strong rounded" src="{{friend.avatar.url}}" alt="{{friend.avatar}}_avatar">
+											</a>
+											<a href="{{friend.get_absolute_url}}">
+												<p class="text-white mt-1">
+													<small>
+														{% if friend.first_name %}
+															{{friend.first_name}} {{friend.last_name}}
+														{% else %}
+															{{friend}}
+														{% endif %}
+													</small>
+												</p>
+											</a>
+										</div>
+									{% endfor %}
+								{% else %}
+									{% if user.id == users_id %}
+										<h6 class="h6 text-white-50">No Friends, why not<a class="text-primary" href=""><strong> make some</strong></a>...</h6>
+									{% else %}
+										<h6 class="h6 text-white-50">User doesn't have any friends yet...</h6>
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				{#  Col-7 #}
+				<div class="col-md-7">
+					{% if len_posts %}
+						{% for post in posts %}
+							<div class="card glass mb-4">
+								<div class="card-header">
+									<div class="d-flex">
+										<a href="{{post.author.get_absolute_url}}">
+											<img class="rounded-circle mr-3" style="" src="{{post.author.avatar.url}}" alt="{{post.author.avatar.url}}_avatar" width="30" height="30">
+										</a>
+										<div class="">
+											<a class="text-white-50" href="{{post.author.get_absolute_url}}">{{post.author.user}}</a>
+										</div>
+									</div>
+								</div>
+								<div class="card-body p-0">
+									<img class="w-100" src="{{post.image.url}}" alt="{{post.image}}" >
+								</div>
+								<div class="card-footer text-muted"><p class="mb-0"><small>{{ post.created|timesince }} ago</small></p></div>
+							</div>
+						{% endfor %}
+					{% else %}
+					<div class="card glass">
+						<div class="card-body">
+							{% if user.id == users_id %}
+								<h6 class="h6 text-white-50">No Posts Yet, why not<a class="text-primary" href="#"><strong> post some</strong></a>...</h6>
+							{% else %}
+								<h6 class="h6 text-white-50">No Posts Yet</h6>
+							{% endif %}
+						</div>
+					</div>
+					{% endif %}
+				</div>
+
+			</div>
+		</div>
+
+	{# includes #}
+	{% include 'Posts/snippets/addPost.html' %}
+	</section>
+</main>
+
+{% endblock bodyContent %}
+
+{% block scripts %}
+    <script type="text/javascript">
+
+		function onFriendRequestSent(){
+			location.reload();
+		}
+
+		function onFriendRequestCancelled(){
+			location.reload();
+		}
+
+		function onFriendRemoved(){
+			location.reload();
+		}
+
+		function onFriendRequestAccepted(){
+			location.reload();
+		}
+
+		function onFriendRequestDeclined(){
+			location.reload();
+		}
+
+
+		var sendFriendRequestBtn = document.getElementById("send_btn")
+		if (sendFriendRequestBtn != null){
+			sendFriendRequestBtn.addEventListener("click", function(){
+				sendFriendRequest("{{users_id}}", onFriendRequestSent)
+			})
+		}
+
+		var cancelFriendRequestBtn = document.getElementById("cancel_btn")
+		if(cancelFriendRequestBtn != null){
+			cancelFriendRequestBtn.addEventListener("click", function(){
+				cancelFriendRequest("{{users_id}}", onFriendRequestCancelled)
+			})
+		}
+
+		var removeFriendBtn = document.getElementById("unfriend_btn")
+		if (removeFriendBtn != null){
+			removeFriendBtn.addEventListener("click", function(){
+				removeFriend("{{users_id}}", onFriendRemoved)
+			})
+		}
+
+		function triggerAcceptFriendRequest(friend_request_id){
+			acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+		}
+
+		function triggerDeclineFriendRequest(friend_request_id){
+			declineFriendRequest(friend_request_id, onFriendRequestDeclined)
+		}
+		
+	</script>
+
+	{% include 'Friends/snippets/send.html' %}
+	{% include 'Friends/snippets/accept.html' %}
+	{% include 'Friends/snippets/reject.html' %}
+	{% include 'Friends/snippets/cancel.html' %}
+	{% include 'Friends/snippets/unfriend.html' %}
+{% endblock scripts %}	

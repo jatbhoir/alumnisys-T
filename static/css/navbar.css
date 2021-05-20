@@ -1,0 +1,31 @@
+.custom-nav {
+	/* margin: 10px 10px 0px !important; */
+	/* padding: 0 !important; */
+	background-color: #f6f5f7 !important;
+	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+	/* backdrop-filter: blur(14.0px) !important;
+	-webkit-backdrop-filter: blur(14.0px) !important;*/
+	/* border-bottom: 1px solid white !important; */
+}
+
+.navbar-brand{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.mainLogo {
+	width: 200px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* dropdownHover Navbar */
+/* @media all and (min-width: 992px) {
+	.navbar .nav-item:hover .dropdown-menu{
+		display: block !important;
+		-webkit-animation-duration:.55s !important;
+		animation-duration:.55s !important;
+		-webkit-animation-timing-function:ease !important;
+		animation-timing-function:ease !important;
+	 }
+} */

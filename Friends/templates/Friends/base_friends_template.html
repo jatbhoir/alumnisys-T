@@ -1,0 +1,106 @@
+{% load static %}
+
+<!doctype html>
+<html lang = "en">
+	<head>
+		{# metaTags #}
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="description" content="{% block description %} {% endblock description %}">
+		{# Favicon #}
+			<link rel="icon" href="{% static 'media/AAAI_Logo.png' %}" type="image/png">
+		{# bootstrap #}
+			<link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}">
+		{# icons #}
+			<link rel="stylesheet" href="{% static 'css/fontawesome_free/css/all.min.css' %}">
+		{# google fonts #}
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+		{# Other CSS #}
+			{% block css %} {% endblock css %}
+		{# Custom CSS #}
+			<link rel="stylesheet" href="{% static 'css/cropperjs/cropper.min.css' %}" type="text/css">
+			<link rel="stylesheet" href="{% static 'css/navbar.css' %}" type="text/css">
+			<link rel="stylesheet" href="{% static 'css/profiles/profile.css' %}" type="text/css">
+			<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+		{# pageTitle #}
+			<title>{% block pageTitle %} {% endblock pageTitle %}</title>
+	</head>
+
+	<body>
+		{# NavBar #}
+		<header>
+			<nav class="navbar fixed-top navbar-expand-lg custom-nav">
+				<div class="container">
+					{#  Left  #}
+					<div class="order-1">
+						{% if user.is_authenticated %}
+							<a href="" class="navbar-brand ">
+								<img src="{% static 'media/AAAI_Logo_Full.png' %}" alt="AAAI_Logo" loading="lazy" class="mainLogo">
+							</a>
+						{% else %}
+							<a href="#" class="navbar-brand">
+								<img src="{% static 'media/AAAI_Logo_Full.png' %}" alt="AAAI_Logo" loading="lazy" class="mainLogo">
+							</a>
+						{% endif %}
+					</div>
+
+					{#  Right  #}
+					<div class="d-inline-flex order-2 order-lg-3">
+						<button type="button" class="btn btn-info align-self-center mr-2 top-btn" data-toggle="modal" data-target="#createPostModal">
+							+
+						</button>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+							<i class="fas fa-bars"></i>
+						</button>
+
+						<ul class="navbar-nav mr-md-0">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+									<img src="{{user.avatar.url}}" alt="{{user}}_avatar" class="rounded-circle" id="og-avatar" height="30" width="30"  loading="lazy" />
+									<span class="d-none d-lg-inline ml-2"><strong>
+										{% if user.first_name %}
+											{{user.first_name}} {{user.last_name}}
+										{% else %}
+											{{user.username}}
+										{% endif %}
+									</strong></span>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-right dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+									<li><a class="dropdown-item" href="{% url 'Accounts:users-profile' user.username %}"><i class="fa fa-user mr-1"></i>My profile</a></li>
+									<li><a class="dropdown-item" href="#"><i class="fa fa-mobile-alt mr-1"></i>Posts</a></li>
+									<li><a class="dropdown-item" href="{% url 'job-lists' %}"><i class="fa fa-laptop-house mr-1"></i>Jobs</a></li>
+									<li><a class="dropdown-item" href="#"><i class="fa fa-calendar-alt mr-1"></i>Events</a></li>
+									<li><a class="dropdown-item" href="{% url 'edit-profile' %}"><i class="fa fa-user-cog mr-1"></i>Settings</a></li>
+									<li><hr class="dropdown-divider my-0"></li>
+									<li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-running mr-1"></i>Logout</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+
+					 {# Search Form  #}
+					<div class="collapse navbar-collapse order-3 order-lg-2" id="navbarNav">
+						<form class="input-group mx-sm-auto mx-lg-5 mb-2 mb-md-0" action="{% url 'search' %}" method="GET">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search" name="q">
+							<button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+						</form>
+					</div>
+
+				</div>
+			</nav>
+		</header>
+
+		{# Profile Section #}
+			{% block bodyContent %}
+
+			{% endblock bodyContent %}
+
+
+		{#Scripts #}
+			<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	</body>
+
+</html>

@@ -1,0 +1,185 @@
+{% extends "Friends/base_friends_template.html" %}
+{% load static  %}
+
+{% block pageTitle %}
+	{% if user.first_name %}
+			{{user.first_name}} {{user.last_name}} | Alumni Association | Alumni Acharya | AAAI
+	{% else %}
+			{{user.username}} | Alumni Association | Alumni Acharya | AAAI
+	{% endif %}
+{% endblock pageTitle %}
+
+{% block description %}  {% endblock description %}
+
+<!-- bodyProfile-->
+{% block bodyContent %}
+<main class="custom-main" >
+	<section class=" glass-fluid py-5" >
+		<div class="container glass">
+
+			<section class="py-3 px-2 d-sm-flex justify-content-between align-items-center">
+				<div class="">
+					<h4 class="text-white"><strong>Friends</strong></h4>
+				</div>
+				<!-- Search Form, Buttons-->
+				<div class="d-sm-inline-flex align-items-center mt-2 mt-md-0">
+					<div class=""><!--order-2 order-md-1-->
+						<form class="input-group ">
+							<input class="form-control" type="search" placeholder="Search Friends" aria-label="Search">
+							<button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+						</form>
+					</div>
+					<!-- <div class=" ml-0 ml-md-2 order-1 order-md-2">
+						<a href="#" role="button" class="btn btn-link" data-ripple-color="dark">Friend requests</a>
+					</div> -->
+				</div>
+			</section>
+
+			<!-- Friend requests -->
+			<section class="border-top">
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="">
+						<h6 class="text-white mt-3 ml-2 "><strong>Friend requests</strong></h6>
+					</div>
+					<div class=" ml-0 ml-md-2 order-1 order-md-2">
+						<a href="{% url 'Friends:friend-request' %}" role="button" class="btn btn-link" data-ripple-color="dark">See all</a>
+					</div>
+				</div>
+					<div class="row mx-md-2">
+						{% for friend in friend_requests|slice:":6" %}
+							{% if friend not in user.friends.all %}
+								<div class="col-lg-4 my-2">
+									<div class="glass p-3 ">
+										<div class="d-flex align-items-center">
+											<!-- avatar -->
+											<a class="" href="{{friend.sender.get_absolute_url}}">
+												<img src="{{friend.sender.avatar.url}}" class="rounded" width="80" height="80" alt="{{friend}}_avatar">
+											</a>
+											<!-- User's name -->
+											<div class="ml-3">
+												<a class="link-primary" href="{{friend.sender.get_absolute_url}}">
+													{% if friend.sender.first_name %}
+														<h5 class="h5">{{friend.sender.first_name}} {{friend.sender.last_name}}</h5>
+													{% else %}
+														<h5 class="h5">{{friend}}</h5>
+													{% endif %}
+												</a>
+												<!-- Accept/Reject Btn-->
+												<div class="d-inline-flex">
+													<button class="btn px-2 py-1 btn-outline-success" id="id_confirm_{{friend.id}}" onclick="triggerAcceptFriendRequest('{{friend.id}}')"><small>Accept</small></button>
+													<button class="btn px-2 py-1 btn-outline-danger ml-2" id="id_cancel_{{friend.id}}"onclick="triggerDeclineFriendRequest('{{friend.id}}')" ><small>Reject</small></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+						{% if not friend_requests %}
+							<h5 class="text-muted glass p-2 pl-3"><small>No new request</small></h5>
+						{% endif %}
+					</div>
+			</section>
+
+			<!--- People you may know --->
+			<section class="border-top border-secondary">
+				<h6 class="text-white mt-3 ml-2"><strong>People you may know</strong></h6>
+					<div class="row mx-md-2">
+						{% for friend in all_friends %}
+							{% if friend not in friend_requests.all %}
+							   	<div class="col-lg-4 my-2">
+									<div class="glass p-3 ">
+										<div class="d-flex align-items-center">
+											<!-- avatar -->
+											<a class="" href="{{ friend.get_absolute_url }}">
+												<img src="{{friend.avatar.url}}" class="rounded" width="80" height="80" alt="{{friend.user}}">
+											</a>
+											<!-- User's name, Users friend count -->
+											<a class="link-primary ml-3" href="{{ friend.get_absolute_url }}">
+												{% if friend.first_name %}
+													<h5 class="h5">{{friend.first_name}} {{friend.last_name}}</h5>
+												{% else %}
+													<h5 class="h5">{{friend}}</h5>
+												{% endif %}
+											</a>
+											<!-- Options -->
+											<div class="ml-auto">
+												<div class="dropdown rounded dropleft">
+													<a class="btn ml-auto" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														<i class="fas fa-ellipsis-h text-muted float-right"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+														<a class="dropdown-item" href="{{ friend.get_absolute_url }}" ><i class="fas fa-user"></i> See profile</a>
+														<div class="dropdown-divider m-0"></div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div> 
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% if no_suggestions %}
+						<h5 class="text-muted glass p-2 pl-3"><small>No Suggestions for you, why not try seaching the user.</small></h5>
+				{% endif %}
+			</section>
+
+		</div>
+	</section>
+</main>
+
+<script type="text/javascript">
+
+	function onFriendRequestSent(){
+		location.reload();
+	}
+
+	function onFriendRequestCancelled(){
+		location.reload();
+	}
+
+	function onFriendRemoved(){
+		location.reload();
+	}
+
+	function onFriendRequestAccepted(){
+		location.reload();
+	}
+
+	function onFriendRequestDeclined(){
+		location.reload();
+	}
+
+
+	var sendFriendRequestBtn = document.getElementById("send_btn")
+	if (sendFriendRequestBtn != null){
+		sendFriendRequestBtn.addEventListener("click", function(){
+			sendFriendRequest("{{users_id}}", onFriendRequestSent)
+		})
+	}
+
+	var cancelFriendRequestBtn = document.getElementById("cancel_btn")
+	if(cancelFriendRequestBtn != null){
+		cancelFriendRequestBtn.addEventListener("click", function(){
+			cancelFriendRequest("{{users_id}}", onFriendRequestCancelled)
+		})
+	}
+
+	function triggerAcceptFriendRequest(friend_request_id){
+		acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+	}
+
+	function triggerDeclineFriendRequest(friend_request_id){
+		declineFriendRequest(friend_request_id, onFriendRequestDeclined)
+	}
+	
+</script>
+
+{% include 'Friends/snippets/send.html' %}
+{% include 'Friends/snippets/accept.html' %}
+{% include 'Friends/snippets/reject.html' %}
+{% include 'Friends/snippets/cancel.html' %}
+
+{% endblock bodyContent%}
